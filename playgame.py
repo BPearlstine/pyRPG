@@ -21,7 +21,7 @@ def main():
             break
         else:
             print("Sorry please enter 'yes' or 'no'." )
-    print("Thanks for playing!")
+    print("\nThanks for playing!")
 
 def chooseStat(index,chosen):
     finished = False

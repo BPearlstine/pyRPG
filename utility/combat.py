@@ -44,7 +44,6 @@ def useItem(player, enemy, party,enemies):
     item = player.items[item_choice]
     player.items[item_choice].qnty -= 1
 
-    print(item.type)
     if item.type == "potion":
         healAmount = item.rollForAffect()
         player.heal(healAmount)
@@ -52,7 +51,7 @@ def useItem(player, enemy, party,enemies):
             player.hp == player.maxHp
         print(bcolors.OKGREEN + "\n" + item.name +
                 " heals for " + str(healAmount)
-                 + "HP" + bcolors.ENDC)
+                 + " HP" + bcolors.ENDC)
     elif item.type == "elixer":
         if item.name == "MegaElixer":
             for player in party:
@@ -130,11 +129,14 @@ def combat(party, enemies):
         print("-----------------------------------")
 
         print("\n\n")
-        print("NAME                 HP")
+        print(bcolors.OKBLUE + bcolors.BOLD + "Party Members" + bcolors.ENDC)
+        print("NAME                    HP")
         for player in party:
             player.getStats()
         print("\n")
 
+        print(bcolors.FAIL + bcolors.BOLD + "Enemies Members" + bcolors.ENDC)
+        print("NAME                    HP")
         for enemy in enemies:
             enemy.get_enemy_stats(False)
 
@@ -167,5 +169,5 @@ def combat(party, enemies):
                 break
 
         baddiesTurn(party,enemies)
-
-        combat = checkWinCon(party,enemies)
+        if combat:
+            combat = checkWinCon(party,enemies)

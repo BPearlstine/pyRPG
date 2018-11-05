@@ -9,9 +9,10 @@ def findItem(csv,toFind):
             line = item.split(",")
             if line[0] == toFind:
                 if csv == "weapons":
-                    newWeapon = Weapon(line[0],line[1],int(line[2]),line[3])
+                    newWeapon = Weapon(line[0],line[1],int(line[2]),line[3].strip('\n'))
                     return newWeapon
                 elif csv == "items":
-                    newItem = Item(line[0],line[1],int(line[2]),line[3])
+                    newItem = Item(line[0], line[1], int(
+                        line[2]), line[3].strip('\n'))
                     return newItem                    
     return False
