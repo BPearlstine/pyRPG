@@ -1,4 +1,4 @@
-from classes.bcolors import bcolors
+from utility.bcolors import bcolors
 import random
 
 def castMagic(player, enemy,enemies):

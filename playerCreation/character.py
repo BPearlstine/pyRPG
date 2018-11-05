@@ -1,6 +1,6 @@
 import random
 from math import floor
-from classes.bcolors import bcolors
+from utility.bcolors import bcolors
 
 class Character:
     def __init__(self,name,strgth,dex,wis,cha):
@@ -19,6 +19,10 @@ class Character:
         self.items = []
         self.magic = []
         self.equippedWeapon = None
+
+    def equipWeapon(self,weapon):
+        if weapon in self.weapons:
+            self.equippedWeapon = weapon
     
     def getAbilityScore(self,stat):
         return floor(stat - 10) - 2

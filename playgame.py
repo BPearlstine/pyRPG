@@ -1,7 +1,9 @@
 import random
-from classes.playerCharacter import Player
-from classes.enemy import Enemy
-from classes.combat import combat
+from playerCreation.playerCharacter import Player
+from playerCreation.enemy import Enemy
+from utility.combat import combat
+from inventory.readAndAddItem import findItem
+
 from colorama import init
 
 def main():
@@ -55,7 +57,11 @@ def begin():
         i += 1
     
     newPlayer = buildCharacter(name, dice)
-
+    weapon = findItem("weapons","dagger")
+    if weapon:
+        newPlayer.weapons.append(weapon)
+        newPlayer.equipWeapon(weapon)
+    
     enterCave(newPlayer)
 
 def enterCave(newPlayer):

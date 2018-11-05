@@ -1,6 +1,6 @@
 import random
-from classes.bcolors import bcolors
-from classes.character import Character
+from utility.bcolors import bcolors
+from playerCreation.character import Character
 
 class Enemy(Character):
     def __init__(self,name,strgth,dex,wis,cha):
