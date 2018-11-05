@@ -28,8 +28,8 @@ class Player(Character):
         i = 1
         print("\n" + bcolors.OKBLUE + bcolors.BOLD + "\tItems:" + bcolors.ENDC)
         for item in self.items:
-            print("\t\t" + str(i) + ":" + item["item"].name + "; " +
-                  item["item"].description + ", available: " + str(item["quantity"]))
+            print("\t\t" + str(i) + ":" + item.name + "; " +
+                  item.description + ", available: " + str(item.qnty))
             i +=1
 
     def getStats(self):

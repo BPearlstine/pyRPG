@@ -3,6 +3,7 @@ from playerCreation.playerCharacter import Player
 from playerCreation.enemy import Enemy
 from utility.combat import combat
 from inventory.readAndAddItem import findItem
+from inventory.items import Item
 
 from colorama import init
 
@@ -61,6 +62,17 @@ def begin():
     if weapon:
         newPlayer.weapons.append(weapon)
         newPlayer.equipWeapon(weapon)
+        
+    potion = findItem("items","potion")
+    print(potion)
+    if potion:
+        potion.addToQnty(4)
+        newPlayer.items.append(potion)
+    megaPotion = findItem("items","megapotion")
+    if megaPotion:
+        megaPotion.addToQnty(1)
+        newPlayer.items.append(megaPotion)
+    
     
     enterCave(newPlayer)
 

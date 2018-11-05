@@ -9,7 +9,8 @@ class Character:
         self.dex = dex
         self.wis = wis
         self.cha = cha
-        self.ac = self.dex + 10
+        dexMod = self.getAbilityScore(dex)
+        self.ac = dexMod + 10
         self.weapons = []
         self.armor = []
         self.dfns = self.dex + self.str + 10
@@ -78,7 +79,7 @@ class Character:
             if not self.equippedWeapon:
                 return random.randrange(1,6) + statToUse
             else:
-                return random.randrange(1,self.equippedWeapon.dmg) + statToUse
+                return random.randrange(1,int(self.equippedWeapon.affect)) + statToUse
         print(bcolors.FAIL + self.name + " tries to attack "+ enemy.name + " but misses!" + bcolors.ENDC)
         return False
 

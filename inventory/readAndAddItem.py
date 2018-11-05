@@ -1,4 +1,5 @@
 from inventory.weapon import Weapon
+from inventory.items import Item
 
 def findItem(csv,toFind):
     fileName =".\\inventory\\" + csv + ".csv"
@@ -7,6 +8,10 @@ def findItem(csv,toFind):
         for item in items:
             line = item.split(",")
             if line[0] == toFind:
-                newWeapon = Weapon(line[0],line[1],line[2],line[3])
-                return newWeapon
+                if csv == "weapons":
+                    newWeapon = Weapon(line[0],line[1],int(line[2]),line[3])
+                    return newWeapon
+                elif csv == "items":
+                    newItem = Item(line[0],line[1],int(line[2]),line[3])
+                    return newItem                    
     return False

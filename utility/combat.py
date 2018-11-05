@@ -24,11 +24,11 @@ def castMagic(player, enemy,enemies):
         print(bcolors.OKBLUE + spell.name + " heals for " +
                 str(magic_dmg) + "\n" + bcolors.ENDC)
     elif spell.type == "black":
-        enemy = choose_target(enemies)
-        enemies[enemy].take_damage(magic_dmg)
+        enemy = enemies[choose_target(enemies)]
+        enemy.take_damage(magic_dmg)
         print(bcolors.OKBLUE + "\n" + spell.name + " deals " +
                 str(magic_dmg) + " points of damage to " + enemies[enemy].name + "." + bcolors.ENDC)
-        deathCheck(enemies, enemy)
+        deathCheck(enemies,enemy)
     return True
 
 def useItem(player, enemy, party,enemies):
@@ -41,29 +41,34 @@ def useItem(player, enemy, party,enemies):
         print(bcolors.FAIL + "\nNone left..." + bcolors.ENDC)
         return False
 
-    item = player.items[item_choice]["item"]
+    item = player.items[item_choice]
     player.items[item_choice].qnty -= 1
 
+    print(item.type)
     if item.type == "potion":
-        player.heal(item.prop)
+        healAmount = item.rollForAffect()
+        player.heal(healAmount)
+        if player.hp > player.maxHp:
+            player.hp == player.maxHp
         print(bcolors.OKGREEN + "\n" + item.name +
-                " heals for " + str(item.prop) + "HP" + bcolors.ENDC)
+                " heals for " + str(healAmount)
+                 + "HP" + bcolors.ENDC)
     elif item.type == "elixer":
         if item.name == "MegaElixer":
             for player in party:
-                player.hp = player.max_hp
+                player.hp = player.maxHp
                 player.mp = player.max_mp
         else:
-            player.hp = player.max_hp
+            player.hp = player.maxHp
             player.mp = player.max_mp
             print(bcolors.OKGREEN + "\n" + item.name +
                 " fully restores HP/MP" + bcolors.ENDC)
     elif item.type == "attack":
-        enemy = choose_target(enemies)
-        enemies[enemy].take_damage(item.prop)
+        enemy = enemies[choose_target(enemies)]
+        enemy.take_damage(item.prop)
         print(bcolors.FAIL + "\n" + item.name + " deals " +
                 str(item.prop) + " points of damage to " + enemies[enemy].name + "." + bcolors.ENDC)
-        deathCheck(enemies, enemy)
+        deathCheck(enemies,enemy)
     return True
 
 def choose_target(enemies):
@@ -114,9 +119,9 @@ def baddiesTurn(party,enemies):
                     party[target].name + " for " + str(dmg) + bcolors.ENDC)
 
 def deathCheck(enemies,enemy):
-    if enemies[enemy].get_hp() == 0:
-        print(bcolors.FAIL + enemies[enemy].name + " has died!" +bcolors.ENDC)
-        del enemies[enemy]
+    if enemy.get_hp() == 0:
+        print(bcolors.FAIL + enemy.name + " has died!" +bcolors.ENDC)
+        enemies.remove(enemy)
 
 def combat(party, enemies):
     combat = True
