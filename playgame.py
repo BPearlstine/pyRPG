@@ -31,8 +31,10 @@ def chooseStat(index,chosen):
         diceIndex = int(input("Which value would you like to be your " + statList[index] + "? "))
         if diceIndex in chosen:
             print("That stat has already been chosen please pick again")
-        else:
+        elif 1 <= diceIndex <= 4 :
             finished = True
+        else:
+            print("Sorry, please choose 1 - 4")
     return diceIndex
 
 def buildCharacter(name, dice):
@@ -42,7 +44,7 @@ def buildCharacter(name, dice):
     for i in range(0,4):
         diceIndex = chooseStat(i,chosen)
         chosen.append(diceIndex)
-        stats.append(dice[diceIndex])
+        stats.append(dice[diceIndex] - 1)
 
     return Player(name,stats[0],stats[1],stats[2],stats[3])
 
@@ -51,11 +53,23 @@ def begin():
     i = 0
     dice = []
     print("Your Stats are: ")
-    while i < 4:
-        roll = random.randrange(0,20)
-        print("[" + str(i) + "] : " + str(roll))
-        dice.append(roll)
-        i += 1
+    likeRolls = False
+    while not likeRolls:
+        while i < 4:
+            roll = random.randrange(0,20)
+            print("[" + str(i + 1) + "] : " + str(roll))
+            dice.append(roll)
+            i += 1
+        i = 0
+        reRoll = input("Do you want to re-roll your stats? [yes/no]: ")
+        if reRoll.lower() == "no":
+            likeRolls = True
+        elif reRoll.lower() != "yes":
+            while reRoll.lower() != "yes" or reRoll.lower() != "no":
+                print("Sorry, pleas enter 'yes' or 'no'")
+                reRoll = input("Do you want to re-roll your stats? [yes/no]: ")
+                if reRoll.lower() == "no":
+                    likeRolls = True
     
     newPlayer = buildCharacter(name, dice)
     weapon = findItem("weapons","dagger")
