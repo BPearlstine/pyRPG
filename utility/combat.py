@@ -8,7 +8,7 @@ def castMagic(player, enemy,enemies):
     while not goodChoice:
         try:
             magic_choice = int(input("\tChoose magic: ")) - 1
-            if magic_choice <= len(player.magic):
+            if magic_choice < len(player.magic):
                 goodChoice = True
             else:
                 print("Please choose one of the available spells")
@@ -45,7 +45,7 @@ def useItem(player, enemy, party,enemies):
     while not goodChoice:
         try:
             item_choice = int(input("\tChoose item: ")) - 1
-            if item_choice <= len(player.items):
+            if item_choice < len(player.items):
                 goodChoice = True
             else:
                 print("Please choose on of the available items")
@@ -95,16 +95,18 @@ def choose_target(enemies):
 
         enemy.get_enemy_stats(i)
         i += 1
-    try:
-        choice = int(input("\tChoose target: ")) - 1
-        if choice <= len(enemies):
-            return choice
-        else:
-            print("Try again\n")
-            choice = choose_target(enemies)
-    except:
-        print("Please enter a number\n")
-        choice = choose_target(enemies)
+    item_choice = 0
+    goodChoice = False
+    while not goodChoice:
+        try:
+            item_choice = int(input("\tChoose target: ")) - 1
+            if item_choice < len(enemies):
+                goodChoice = True
+            else:
+                print("Please choose on of the available enemies")
+        except:
+            print("Please enter a number corresponding to an enemy")
+
     return choice
 
 def checkWinCon(party,enemies):
