@@ -1,4 +1,3 @@
-fix bad input exceptions
 build character classes as child-classes of PC
 -build three initially
 --ranger,fighter,mage?
