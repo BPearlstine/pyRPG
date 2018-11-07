@@ -3,10 +3,17 @@ import random
 
 def castMagic(player, enemy,enemies):
     player.choose_magic()
-    magic_choice = int(input("\tChoose magic: ")) - 1
-
-    if magic_choice == -1:
-        return False
+    magic_choice = 0
+    goodChoice = False
+    while not goodChoice:
+        try:
+            magic_choice = int(input("\tChoose magic: ")) - 1
+            if magic_choice <= len(player.magic):
+                goodChoice = True
+            else:
+                print("Please choose one of the available spells")
+        except:
+            print("Please enter a number corresponding to a spell")
 
     spell = player.magic[magic_choice]
     magic_dmg = spell.generate_damage()
@@ -33,7 +40,17 @@ def castMagic(player, enemy,enemies):
 
 def useItem(player, enemy, party,enemies):
     player.choose_item()
-    item_choice = int(input("\tChoose item: ")) - 1
+    item_choice = 0
+    goodChoice = False
+    while not goodChoice:
+        try:
+            item_choice = int(input("\tChoose item: ")) - 1
+            if item_choice <= len(player.items):
+                goodChoice = True
+            else:
+                print("Please choose on of the available items")
+        except:
+            print("Please enter a number corresponding to an item")
 
     if item_choice == -1:
         return False
@@ -72,12 +89,23 @@ def useItem(player, enemy, party,enemies):
 
 def choose_target(enemies):
     i = 1
+    choice = 0
     print("\n" + bcolors.FAIL + bcolors.BOLD + "\tTarget:" + bcolors.ENDC)
     for enemy in enemies:
 
         enemy.get_enemy_stats(i)
         i += 1
-    return int(input("\tChoose target: ")) - 1
+    try:
+        choice = int(input("\tChoose target: ")) - 1
+        if choice <= len(enemies):
+            return choice
+        else:
+            print("Try again\n")
+            choice = choose_target(enemies)
+    except:
+        print("Please enter a number\n")
+        choice = choose_target(enemies)
+    return choice
 
 def checkWinCon(party,enemies):
     if not enemies:
@@ -142,9 +170,17 @@ def combat(party, enemies):
 
         for player in party:
             player.choose_action()
-            choice = input("\tChoose action: ")
-            index = int(choice) - 1
-
+            goodChoice = False
+            while not goodChoice:
+                try:
+                    choice = input("\tChoose action: ")
+                    index = int(choice) - 1
+                    if index < len(player.actions):
+                        goodChoice = True
+                    else:
+                        print("Choose one of the choices from the list")
+                except:
+                    print("Choose one of the choices from the list")
             if player.actions[index] == "attack":
                 enemy = enemies[choose_target(enemies)]
                 dmg = player.damage(enemy)

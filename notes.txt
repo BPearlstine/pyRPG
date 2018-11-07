@@ -1,0 +1,14 @@
+fix bad input exceptions
+build character classes as child-classes of PC
+-build three initially
+--ranger,fighter,mage?
+--fuck bards
+--once mage is built build out magic
+move magic and combat to own folders, out of utility
+time for tests
+make sure parties(both PC and baddies)work
+next up rooms
+--two modes(random room, and planned adventure) or just planned?
+---start with planned, think about adding random
+--sick ascii art?
+eventually move from csv's to db tables
