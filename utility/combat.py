@@ -1,13 +1,12 @@
 from utility.bcolors import bcolors
 from utility.inputChecks import checkForGoodInput
+from utility.options import options
 import random
 
-def castMagic(player, enemy,enemies):
+def castMagic(player, enemies):
     player.choose_magic()
     magic_choice = checkForGoodInput("\tChoose magic: ", len(player.magic))
     spell = player.magic[magic_choice]
-    magic_dmg = spell.generate_damage()
-
     current_mp = player.get_mp()
 
     if spell.cost > current_mp:
@@ -15,20 +14,20 @@ def castMagic(player, enemy,enemies):
         return False
 
     player.reduce_mp(spell.cost)
-
-    if spell.type == "white":
-        player.heal(magic_dmg)
-        print(bcolors.OKBLUE + spell.name + " heals for " +
-                str(magic_dmg) + "\n" + bcolors.ENDC)
-    elif spell.type == "black":
-        enemy = enemies[choose_target(enemies)]
-        enemy.take_damage(magic_dmg)
-        print(bcolors.OKBLUE + "\n" + spell.name + " deals " +
-                str(magic_dmg) + " points of damage to " + enemies[enemy].name + "." + bcolors.ENDC)
-        deathCheck(enemies,enemy)
+    spell.castSpell(player,enemies)
     return True
 
-def useItem(player, enemy, party,enemies):
+def elixerBoost(player,item):
+    hpBoost = item.rollForAffect()
+    mpBoost = item.rollForAffect()
+    player.heal(hpBoost)
+    player.gain_mp(mpBoost)
+    print(bcolors.OKGREEN + "\n" + item.name +
+            " restores HP" + str(hpBoost) + bcolors.ENDC)
+    print(bcolors.OKGREEN + "\n" + item.name +
+            " restores MP" + str(mpBoost) + bcolors.ENDC)
+
+def useItem(player, party, enemies):
     player.choose_item()
     item_choice = checkForGoodInput("\tChoose item: ", len(player.items))
     if item_choice == -1:
@@ -49,15 +48,11 @@ def useItem(player, enemy, party,enemies):
                 " heals for " + str(healAmount)
                  + " HP" + bcolors.ENDC)
     elif item.type == "elixer":
-        if item.name == "MegaElixer":
+        if item.name == "megaElixer":
             for player in party:
-                player.hp = player.maxHp
-                player.mp = player.max_mp
+                elixerBoost(player,item)
         else:
-            player.hp = player.maxHp
-            player.mp = player.max_mp
-            print(bcolors.OKGREEN + "\n" + item.name +
-                " fully restores HP/MP" + bcolors.ENDC)
+            elixerBoost(player,item)                
     elif item.type == "attack":
         enemy = enemies[choose_target(enemies)]
         enemy.take_damage(item.prop)
@@ -119,6 +114,32 @@ def deathCheck(enemies,enemy):
         print(bcolors.FAIL + enemy.name + " has died!" +bcolors.ENDC)
         enemies.remove(enemy)
 
+def combatMenu(index, player, enemies, party):
+    if player.actions[index] == "attack":
+        enemy = enemies[choose_target(enemies)]
+        dmg = player.damage(enemy)
+        if dmg:
+            enemy.takeDamage(dmg)
+            print(bcolors.HEADER + player.name + "atacked " + enemy.name + " for " +
+                    str(dmg) + " points of damage." + bcolors.ENDC)
+            deathCheck(enemies, enemy)
+
+    elif player.actions[index] == "spells":
+        magicCast = castMagic(player, enemies)
+        if not magicCast:
+            return False
+
+    elif player.actions[index] == "items":
+        usedItem = useItem(player, party, enemies)
+        if not usedItem:
+            return False
+
+    elif player.actions[index] == "options":
+        choice = options()
+        return choice
+
+    return True
+
 def combat(party, enemies):
     combat = True
     print(bcolors.FAIL + bcolors.BOLD + "AN ENEMY ATTACKS!" + bcolors.ENDC)
@@ -127,13 +148,13 @@ def combat(party, enemies):
 
         print("\n\n")
         print(bcolors.OKBLUE + bcolors.BOLD + "Party Members" + bcolors.ENDC)
-        print("NAME                    HP")
+        print("NAME                   HP                                              MP")
         for player in party:
             player.getStats()
         print("\n")
 
         print(bcolors.FAIL + bcolors.BOLD + "Enemies Members" + bcolors.ENDC)
-        print("NAME                    HP")
+        print("NAME                   HP")
         for enemy in enemies:
             enemy.get_enemy_stats(False)
 
@@ -141,26 +162,12 @@ def combat(party, enemies):
             player.choose_action()
             index = checkForGoodInput("\tChoose action: ", len(player.actions))
 
-            if player.actions[index] == "attack":
-                enemy = enemies[choose_target(enemies)]
-                dmg = player.damage(enemy)
-                if dmg:
-                    enemy.takeDamage(dmg)
-                    print(bcolors.HEADER + "You atacked " + enemy.name + " for " +
-                        str(dmg) + " points of damage." + bcolors.ENDC)
-                    deathCheck(enemies,enemy)
-
-            elif player.actions[index] == "magic":
-                magicCast = castMagic(player, enemy,enemies)
-                if not magicCast:
-                    continue
-
-            elif player.actions[index] == "items":
-                usedItem = useItem(player,enemy,party,enemies)
-                if not usedItem:
-                    continue
+            success = combatMenu(index, player, enemies,party)
+            if not success:
+                continue
 
             combat = checkWinCon(party, enemies)
+
             if not combat:
                 break
 

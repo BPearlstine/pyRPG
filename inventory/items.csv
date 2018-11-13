@@ -1,2 +1,4 @@
 potion,potion,8,Heals 1d8 damage
 megapotion,potion,12,Heals 1d8 damage
+elixer, elixer, 12, Heals HP/MP 1d12
+megaElixer, elixer, 12, Heals HP/MP 1d12

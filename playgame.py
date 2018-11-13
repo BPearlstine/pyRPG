@@ -1,8 +1,11 @@
 import random
 
-from playerCreation.playerCharacter import Player
+from playerCreation.baseClasses.paladin import Paladin
+from playerCreation.baseClasses.mage import Mage
+from playerCreation.baseClasses.ranger import Ranger
 from playerCreation.enemy import Enemy
 from utility.combat import combat
+from utility.inputChecks import checkForGoodInput
 from inventory.readAndAddItem import findItem
 from inventory.items import Item
 
@@ -42,14 +45,25 @@ def chooseStat(index,chosen):
     return diceIndex
 
 def buildCharacter(name, dice):
-    
+    print("Which class would you like to play as?")
+    classes = ["paladin", "mage", "ranger"]
+    for i in range(0,3):
+        print("[" + str(i + 1) + "] " + classes[i])
+    classIndex = checkForGoodInput(": ", len(classes))
+    startingClass = classes[classIndex]
+
     chosen = []
     stats = []
     for i in range(0,4):
         diceIndex = chooseStat(i,chosen)
         chosen.append(diceIndex)
         stats.append(dice[diceIndex - 1])
-    return Player(name,stats[0],stats[1],stats[2],stats[3])
+    if startingClass == "paladin":
+        return Paladin(name,stats[0],stats[1],stats[2],stats[3])
+    elif startingClass == "mage":
+        return Mage(name, stats[0], stats[1], stats[2], stats[3])
+    elif startingClass == "ranger":
+        return Ranger(name, stats[0], stats[1], stats[2], stats[3])
 
 def begin():
     goodName = False
@@ -81,21 +95,6 @@ def begin():
         #             likeRolls = True
     
     newPlayer = buildCharacter(name, dice)
-    weapon = findItem("weapons","dagger")
-    if weapon:
-        newPlayer.weapons.append(weapon)
-        newPlayer.equipWeapon(weapon)
-        
-    potion = findItem("items","potion")
-    if potion:
-        potion.addToQnty(4)
-        newPlayer.items.append(potion)
-    megaPotion = findItem("items","megapotion")
-    if megaPotion:
-        megaPotion.addToQnty(1)
-        newPlayer.items.append(megaPotion)
-    
-    
     enterCave(newPlayer)
 
 def enterCave(newPlayer):

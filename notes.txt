@@ -1,8 +1,10 @@
+in all options use 0 for go options menu?
 build character classes as child-classes of PC
 -build three initially
 --ranger,fighter,mage?
 --fuck bards
 --once mage is built build out magic
+--switch order of dice roll and choosing class
 move magic and combat to own folders, out of utility
 time for tests
 make sure parties(both PC and baddies)work

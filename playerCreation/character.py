@@ -1,6 +1,7 @@
 import random
 from math import floor
 from utility.bcolors import bcolors
+from magic.magic import Spell
 
 class Character:
     def __init__(self,name,strgth,dex,wis,cha):
@@ -9,16 +10,17 @@ class Character:
         self.dex = dex
         self.wis = wis
         self.cha = cha
-        dexMod = self.getAbilityScore(dex)
-        self.ac = dexMod + 10
+        self.ac = self.getAbilityScore(dex) + 10
         self.weapons = []
         self.armor = []
         self.dfns = self.dex + self.str + 10
         self.maxHp = 20
         self.hp = 20
-        self.actions = ['attack','items']
+        self.actions = ['options','attack','items']
         self.items = []
         self.magic = []
+        self.maxMP = 0
+        self.mp = 0
         self.equippedWeapon = None
 
     def equipWeapon(self,weapon):
@@ -28,8 +30,14 @@ class Character:
     def getAbilityScore(self,stat):
         return floor(stat - 10) - 2
 
-    def addMagic(self,spell):
-        self.magic.append(spell)
+    def addMagic(self,spells):
+        with open(".\\magic\\spells.csv") as f:
+            data = f.readlines()
+            for line in data:
+                line = line.split(",")
+                if line[0] in spells:
+                    newSpell = Spell(line[0], int(line[1]), int(line[2]), line[3], line[4])
+                    self.magic.append(newSpell)
     
     def get_hp(self):
         return self.hp
@@ -46,6 +54,17 @@ class Character:
         self.hp += healed
         if self.hp > self.maxHp:
             self.hp = self.maxHp
+    
+    def get_mp(self):
+        return self.mp
+    
+    def reduce_mp(self,cost):
+        self.mp -= cost
+
+    def gain_mp(self,gain):
+        self.mp += gain
+        if self.mp > self.maxMP:
+            self.mp = self.maxMP
     
     def removeArmor(self,armor):
         if armor in self.armor: 
@@ -115,3 +134,5 @@ class Character:
                 name += " "
                 decreased -= 1
         return name
+
+
