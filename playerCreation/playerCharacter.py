@@ -44,7 +44,7 @@ class Player(Character):
 
         name = self.padName()
 
-        print("                       ==========================                     ===========")
+        print("                   ==========================                     ===========")
         print(bcolors.BOLD + name + "    "+ current_hp + "|" + bcolors.OKGREEN + hp_bar +\
               bcolors.ENDC + "|        " + current_mp + "|" +
               bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")

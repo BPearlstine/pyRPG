@@ -34,7 +34,7 @@ class Character:
         with open(".\\magic\\spells.csv") as f:
             data = f.readlines()
             for line in data:
-                line = line.split(",")
+                line = line.strip('\n').split(",")
                 if line[0] in spells:
                     newSpell = Spell(line[0], int(line[1]), int(line[2]), line[3], line[4])
                     self.magic.append(newSpell)

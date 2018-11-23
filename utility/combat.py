@@ -146,9 +146,9 @@ def combat(party, enemies):
     while combat:
         print("-----------------------------------")
 
-        print("\n\n")
+        print("\n")
         print(bcolors.OKBLUE + bcolors.BOLD + "Party Members" + bcolors.ENDC)
-        print("NAME                   HP                                              MP")
+        print("NAME               HP                                              MP")
         for player in party:
             player.getStats()
         print("\n")

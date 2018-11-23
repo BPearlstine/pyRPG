@@ -17,11 +17,11 @@ class Spell:
         
         return random.randrange(1, 6) + wisMod
 
-    def castSpell(self,character,enemies):        
+    def castSpell(self,character,enemies):       
         if self.type == "white":
             magic_dmg = self.generate_damage(character)
             character.heal(magic_dmg)
-            print(bcolors.OKBLUE + self.name + " heals for " +
+            print(bcolors.OKBLUE + character.name + " heals for " +
                 str(magic_dmg) + "\n" + bcolors.ENDC)
         elif self.type == "black":
             enemy = enemies[choose_target(enemies)]
@@ -33,6 +33,6 @@ class Spell:
             else:
                 magic_dmg = self.generate_damage(character)
                 enemy.take_damage(magic_dmg)
-                print(bcolors.OKBLUE + "\n" + self.name + " deals " +
+                print(bcolors.OKBLUE + "\n" + character.name + " deals " +
                     str(magic_dmg) + " points of damage to " + enemies[enemy].name + "." + bcolors.ENDC)
                 deathCheck(enemies, enemy)
